@@ -1,23 +1,25 @@
 from flask import Flask, render_template, request
-import request
+import requests
+app = Flask(__name__)
 
-app=Flask(__name__)
 
 @app.route('/')
-
 def main():
-	return render_template('index.html')
+	return render_template("index.html")
 
-@app.route('/',methods=['POST'])
+@app.route('/', methods=['POST'])
+def maths_operations():
+	equation = request.form['text']
+	operation = request.form['operation']
 
-def math_operations():
-	equation=request.form['text']
-	operation=request.form['operation']
-	result='https://newton.now.sh/api/v2//'+operation+'/'+equation
-	data=request.get(result).json()
-	answer=data['result']
+	result = 'https://newton.now.sh/api/v2//'+operation+'/' + equation
 
-	return render_template("index.html",result=answer,equation=equation)
+	data = requests.get(result).json()
+
+	answer = data['result']
+
+	return render_template("index.html", result=answer , equation=equation)
 
 if __name__ == "__main__":
 	app.run()
+
